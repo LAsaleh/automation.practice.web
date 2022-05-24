@@ -12,20 +12,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import static automation.practice.CommonUtils.*;
+
+import java.util.List;
 import java.util.Locale;
 
 public class AutomationEndToEnd {
 
     final public static String APP_URL = "http://automationpractice.com/index.php";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+
+        System.out.println("BEGINNING OF REGISTRATION END2END FLOW");
 
 
         WebDriverManager.chromedriver().setup();
 
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
         driver.get(APP_URL);
 
@@ -195,6 +199,20 @@ public class AutomationEndToEnd {
         String valueRandomState = randomState();
         select.selectByVisibleText(valueRandomState);
 
+        WebElement zipCode = driver.findElement(By.id("postcode"));
+        String randomlyZipCode = randomZipCode();
+        zipCode.sendKeys(randomlyZipCode);
+
+        WebElement id_countryInput = driver.findElement(By.id("id_country"));
+        select = new Select(id_countryInput);
+        WebElement selectedCountry = select.getFirstSelectedOption();
+        String selectedCountryTXt = selectedCountry.getText();
+        if(selectedCountryTXt.equals("united states")){
+            System.out.println("united states is selected correctly");
+        }else{
+            System.out.println("united states is not selected");
+        }
+
 
         WebElement additionalInfo = driver.findElement(By.id("other"));
         String randomAdditional = generateRandomString(100);
@@ -202,11 +220,94 @@ public class AutomationEndToEnd {
 
 
         WebElement phone_mobile = driver.findElement(By.id("phone_mobile"));
-        String randomChecker = randomPhoneNumber();
-        phone_mobile.sendKeys(randomChecker);
+        String randomPhoneChecker = randomPhoneNumber();
+        phone_mobile.sendKeys(randomPhoneChecker);
 
+        WebElement aliasAddress = driver.findElement(By.id("alias"));
+        aliasAddress.sendKeys(randomStreetAddress());
+
+        WebElement registerBtn = driver.findElement(By.id("submitAccount"));
+
+        if (registerBtn.isEnabled()){
+            System.out.println("button is clickable");
+            registerBtn.click();
+
+        }else{
+            System.out.println("button is not clickable");
+        }
+
+        System.out.println("NEW USER DETAILS");
+        System.out.println("email: " + emailAddress);
+        System.out.println("paswd: " + password);
+
+
+        WebElement pageHeadingMyAccount = driver.findElement(By.className("page-heading"));
+        if(pageHeadingMyAccount.isDisplayed()){
+            System.out.println("PageHeading is there");
+        }else{
+            System.out.println("PageHeading is NOT there");
+        }
+
+        WebElement userAccountName = driver.findElement(By.xpath("//div[@class='header_user_info']/a/span"));
+        if(userAccountName.isDisplayed()){
+            System.out.println("USER ACCOUNT NAME IS DISPLAYED");
+        }else {
+            System.out.println("USER ACCOUNT NAME IS NOT DISPLAYED");
+        }
+            List<WebElement> elementsOfListMyAccount = driver.findElements(By.xpath("//div[contains(@class,'addresses-lists')]/div/ul/list"));
+        for (int i = 0; i < elementsOfListMyAccount.size(); i++) {
+            elementsOfListMyAccount.get(i).click();
+
+        }
+
+        WebElement logoutMyAccountPG = driver.findElement(By.linkText("Sign out"));
+        logoutMyAccountPG.click();
+
+        driver.get(APP_URL);
+
+        WebElement sign_in2 = driver.findElement(By.linkText("Sign in"));
+        if(sign_in2.isDisplayed()){
+            System.out.println("SING IN 2 is displayed");
+            sign_in2.click();
+        }else{
+            System.out.println("SING IN 2 is NOT displayed");
+        }
+
+        driver.findElement(By.id("email")).sendKeys(emailAddress);
+        driver.findElement(By.id("passwd")).sendKeys(password);
+
+        WebElement submitLogin = driver.findElement(By.id("SubmitLogin"));
+        if(submitLogin.isEnabled()){
+            System.out.println("Submit log in is enabled");
+            submitLogin.click();
+        }else{
+            System.out.println("Submit log in is Not enabled");
+
+        }
+
+        WebElement userAccountName2 = driver.findElement(By.xpath("//div[@class='header_user_info']//span"));
+        if(userAccountName2.isDisplayed()){
+            System.out.println("User Account is Displayed");
+        }else{
+            System.out.println("User Account is NOT Displayed");
+        }
+
+        driver.findElement(By.linkText("Sign out")).click();
+        System.out.println("Successfully sign out");
+
+        Thread.sleep(2000);
+
+
+        driver.quit();
+        System.out.println("END OF USER REGISTRATION END2END FLOW");
 
 
 
     }
-}
+
+
+    }
+
+
+
+//mitchell.emery@hotmail.com

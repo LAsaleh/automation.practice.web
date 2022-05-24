@@ -9,6 +9,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
     public class CommonUtils {
 
+        public static String randomZipCode(){
+            return new Faker().address().zipCode().substring(0,5);
+
+        }
+
         public static String  randomPhoneNumber(){
             return String.format("(%03d) %03d-%04d",
                     (int) Math.floor(999*Math.random()),
@@ -19,9 +24,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 
-        public static String generateRandomString(int limit){
-            String saltChars = "qwertyuiopasdfghjklzxcvbnm1234567890./";
-            StringBuilder salt = new StringBuilder();
+    public static String generateRandomString(int limit){
+        String saltChars = "qwertyuiopasdfghjklzxcvbnm1234567890./".toLowerCase();
+        StringBuilder salt = new StringBuilder();
             Random rnd = new Random();
             while (salt.length() < limit){
                 int index = (int) (rnd.nextFloat() * saltChars.length());
@@ -35,12 +40,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 
-        public static String randomState(){
+    public static String randomState(){
             return new Faker().address().state();
         }
 
-
-public static String randomCompanyName(){
+    public static String randomCompanyName(){
             return new Faker().company().name();
 }
 
@@ -105,7 +109,7 @@ public static String randomCompanyName(){
 //
 //        System.out.println(randomNumber(1,30));
         System.out.println(randomDOBAbove18());
-        System.out.println(generateRandomString(100));
+        System.out.println(generateRandomString(50));
         System.out.println(randomPhoneNumber());
 
     }
